@@ -5,7 +5,8 @@ require_relative './vagrant/key_authorization'
 
 Vagrant.configure('2') do |config|
   config.vm.box = 'ubuntu/trusty64'
-  authorize_key_for_root config,'~/.ssh/id_rsa.pub'
+  config.omnibus.chef_version = '12.20.3'
+  authorize_key_for_root config,'~/.ssh/id_rsa.pub','.ssh/epam.pub'
 
   config.hostmanager.enabled = true
   config.hostmanager.manage_host = true
@@ -13,22 +14,20 @@ Vagrant.configure('2') do |config|
   config.hostmanager.ignore_private_ip = false
   config.hostmanager.include_offline = false
 
-  config.chef_zero.enabled = true
-  config.chef_zero.chef_server_url = "http://127.0.0.1:8889"
-  config.chef_zero.roles = "./chef/roles/"
-  config.chef_zero.cookbooks = "./chef/cookbooks/"
-  config.chef_zero.environments = "./chef/environments/"
-  config.chef_zero.data_bags = "./chef/data_bags/"
-
   {
-    'jenkins'       => '192.168.11.100'
+    'jenkins' => '192.168.11.100',
+    'slave-node01' => '192.168.11.101',
+    'slave-node02' => '192.168.11.102'
   }.each do |short_name, ip|
     config.vm.define short_name do |host|
       host.vm.network 'private_network', ip: ip
-      host.vm.hostname = "#{short_name}.crp.local"
-      host.vm.provision :chef_client do |chef|
-        chef.environment = "sandbox"
-        chef.run_list = ["role[base]"]
+      host.vm.hostname = "#{short_name}.sandbox.local"
+      host.vm.provision :chef_solo do |chef|
+        chef.cookbooks_path = "./chef/cookbooks"
+        chef.roles_path = "./chef/roles"
+        chef.data_bags_path = "./chef/data_bags"
+        chef.run_list = ["role[jenkins-master]"] if short_name == "jenkins"
+        chef.run_list = ["role[jenkins-slave]"] if short_name.include? "slave"
       end
       host.vm.provider "virtualbox" do |vbox|
         vbox.cpus = 2
@@ -56,6 +55,11 @@ Vagrant.configure('2') do |config|
   end
 
   config.group.groups = {
+    'jenkins' => [
+      'jenkins',
+      'slave-node01',
+      'slave-node02'
+    ],
     'swarm' => [
       'docker-master01',
       'docker-worker01',
