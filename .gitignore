@@ -6,4 +6,4 @@
 # Ignore Chef key files and secrets
 ###
 .chef/*.pem
-.chef/encrypted_data_bag_secret
+.chef/keys/encrypted_data_bag_secret
