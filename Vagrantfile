@@ -22,10 +22,12 @@ Vagrant.configure('2') do |config|
     config.vm.define short_name do |host|
       host.vm.network 'private_network', ip: ip
       host.vm.hostname = "#{short_name}.sandbox.local"
-      host.vm.provision :chef_solo do |chef|
+      host.vm.provision :chef_zero do |chef|
+        chef.encrypted_data_bag_secret_key_path = "./chef/secret/encrypted_data_bag_secret"
         chef.cookbooks_path = "./chef/cookbooks"
         chef.roles_path = "./chef/roles"
         chef.data_bags_path = "./chef/data_bags"
+        chef.nodes_path = "./chef/nodes"
         chef.run_list = ["role[jenkins-master]"] if short_name == "jenkins"
         chef.run_list = ["role[jenkins-slave]"] if short_name.include? "slave"
       end
