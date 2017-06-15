@@ -23,5 +23,5 @@ jenkins_job 'dsl-hello-world' do
 end
 
 jenkins_job 'dsl-hello-world' do
-  action :build
+  action :nothing
 end
