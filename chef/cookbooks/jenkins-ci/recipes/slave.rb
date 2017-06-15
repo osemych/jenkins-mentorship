@@ -54,7 +54,12 @@ git_config 'user.name' do
 end
 
 jenkins_jnlp_slave node['hostname'] do
-  description 'A generic slave node'
-  remote_fs   '/home/jenkins'
-  labels      ['builder', 'linux']
+  description     'On-demand slave node'
+  remote_fs       '/home/jenkins'
+  executors       2
+  usage_mode      'normal'
+  availability    'demand'
+  in_demand_delay 1
+  idle_delay      1
+  labels          ['slave', 'linux']
 end
