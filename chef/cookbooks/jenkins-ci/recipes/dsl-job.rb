@@ -20,6 +20,7 @@ end
 jenkins_job 'dsl-hello-world' do
   config xml
   action :create
+  notifies :create, jenkins_job[dsl-hello-world], :immediately
 end
 
 jenkins_job 'dsl-hello-world' do

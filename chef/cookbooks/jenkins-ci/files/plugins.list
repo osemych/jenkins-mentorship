@@ -6,13 +6,13 @@ ssh-credentials:1.13
 plain-credentials:1.4
 active-directory:2.4
 git:3.3.0
-job-dsl:1.63
+job-dsl:1.59
 git-client:2.4.6
 credentials:2.1.13
 mailer:1.20
 matrix-project:1.11
-script-security:1.27
+script-security:1.25
 junit:1.20
 structs:1.7
-github:1.27
+github:1.27.0
 display-url-api:2.0
