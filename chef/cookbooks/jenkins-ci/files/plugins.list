@@ -1,7 +1,7 @@
 active-directory:2.4
 github:1.27.0
 git:3.3.0
-job-dsl:1.63
+job-dsl:1.59
 mailer:1.20
 display-url-api:2.0
 token-macro:2.1
