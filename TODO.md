@@ -1,5 +1,8 @@
 # TODO
 
-- [ ] authenticate from groovy
-- [ ] run groovy as user (not anonymous)
-- [ ] groovy script execution approval
+- [ ] Docker host
+- [ ] Jenkins slave as Docker containers
+- [ ] Run Docker slave containers on-demand
+- [ ] Authenticate from groovy script
+- [ ] Run groovy as user (not anonymous)
+- [ ] Groovy script execution approval
