@@ -1,0 +1,11 @@
+import jenkins.model.*
+
+def instance = Jenkins.getInstance()
+def maven = Jenkins.instance.getExtensionList(hudson.tasks.Maven.DescriptorImpl.class)[0]
+
+maven.setInstallations(
+  new hudson.tasks.Maven.MavenInstallation(
+    "Maven", "/usr/local/maven-<%= node[:jenkins][:tools][:maven_version] %>", []
+  )
+)
+maven.save()

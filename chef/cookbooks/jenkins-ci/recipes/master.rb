@@ -30,43 +30,36 @@ end
 secret = Chef::EncryptedDataBagItem.load_secret("/tmp/vagrant-chef/encrypted_data_bag_secret_key")
 credentials = Chef::EncryptedDataBagItem.load("jenkins", "ad_creds", secret)
 
-jenkins_script 'add_maven' do
-  command <<-EOH.gsub(/^ {4}/, '')
-    import jenkins.model.*
-    def instance = Jenkins.getInstance()
+init_dir = "#{node['jenkins']['master']['home']}/init.groovy.d"
 
-    def mavenTask = Jenkins.instance.getExtensionList(
-      hudson.tasks.Maven.DescriptorImpl.class
-    )[0]
-    mavenTask.setInstallations(
-      new hudson.tasks.Maven.MavenInstallation(
-        "Maven", "/usr/local/maven-3.5.0", []
-      )
-    )
-    mavenTask.save()
-  EOH
+directory init_dir do
+  owner node['jenkins']['master']['user']
+  group node['jenkins']['master']['group']
+  recursive true
 end
 
-jenkins_script 'ad_auth' do
-    command <<-EOH.gsub(/^ (4)/, '')
-        import jenkins.model.*
-        import jenkins.security.*
-        import hudson.security.*
-        import hudson.plugins.active_directory.*
+template "#{init_dir}/01-install-maven.groovy" do
+  source 'init/01-install-maven.groovy.erb'
+  mode '0755'
+  owner node['jenkins']['master']['user']
+  group node['jenkins']['master']['group']
+  variables(
+    'tools': node['jenkins']['tools']
+  )
+end
 
-        def instance = Jenkins.getInstance()
-        String domain = "#{credentials["credentials"]["ad_domain"]}"
-        String site = "#{credentials["credentials"]["ad_site"]}"
-        String server = "#{credentials["credentials"]["ad_server"]}"
-        String bindName = "#{credentials["credentials"]["ad_bindname"]}"
-        String bindPassword = "#{credentials["credentials"]["ad_bindpasswd"]}"
-        def adrealm = new ActiveDirectorySecurityRealm(domain, site, bindName, bindPassword, server, GroupLookupStrategy.RECURSIVE)
-        instance.setSecurityRealm(adrealm)
-//        def strategy = new FullControlOnceLoggedInAuthorizationStrategy()
-//        strategy.setAllowAnonymousRead(true)
-//        instance.setAuthorizationStrategy(strategy)
-        instance.save()
-    EOH
+template "#{init_dir}/02-ad-auth.groovy" do
+  source 'init/02-ad-auth.groovy.erb'
+  mode '0755'
+  owner node['jenkins']['master']['user']
+  group node['jenkins']['master']['group']
+  variables(
+    'ad_domain': credentials['credentials']['ad_domain'],
+    'ad_site': credentials['credentials']['ad_site'],
+    'ad_server': credentials['credentials']['ad_server'],
+    'ad_bindname': credentials['credentials']['ad_bindname'],
+    'ad_bindpasswd': credentials['credentials']['ad_bindpasswd'],
+  )
 end
 
 jenkins_command 'safe-restart'
