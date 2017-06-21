@@ -6,3 +6,4 @@ mailer:1.20
 display-url-api:2.0
 token-macro:2.1
 git-client:2.4.6
+docker-plugin:0.16.2
