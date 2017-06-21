@@ -46,12 +46,18 @@ Vagrant.configure('2') do |config|
   }.each do |short_name, ip|
     config.vm.define short_name do |host|
       host.vm.network 'private_network', ip: ip
-      host.vm.hostname = "#{short_name}.crp.local"
-      host.vm.provision "shell", path: "./init/docker.sh"
+      host.vm.hostname = "#{short_name}.sandbox.local"
+      host.vm.provision :chef_zero do |chef|
+        chef.encrypted_data_bag_secret_key_path = "./chef/secret/encrypted_data_bag_secret"
+        chef.cookbooks_path = "./chef/cookbooks"
+        chef.roles_path = "./chef/roles"
+        chef.data_bags_path = "./chef/data_bags"
+        chef.nodes_path = "./chef/nodes"
+        chef.run_list = ["role[docker-master]"] if short_name.include? "docker-master"
+      end
       host.vm.provider "virtualbox" do |vbox|
         vbox.cpus = 2
         vbox.memory = 1024
-        vbox.memory = 512 if short_name.include? "docker-master"
       end
     end
   end

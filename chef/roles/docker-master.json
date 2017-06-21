@@ -1,26 +1,16 @@
 {
   "name": "base",
-  "description": "A role to configure base server",
+  "description": "A role to configure Docker master",
   "json_class": "Chef::Role",
   "default_attributes": {
 
   },
   "override_attributes": {
-    "java": {
-      "install_flavor": "openjdk",
-      "jdk_version": "7"
-    },
-    "jenkins": {
-      "master": {
-        "install_method": "war"
-      }
-    }
+
   },
   "chef_type": "role",
   "run_list": [
     "recipe[apt]",
-    "recipe[java]",
-    "recipe[jenkins-ci::master]",
-    "recipe[jenkins-ci::dsl-job]"
+    "recipe[docker-ci]"
   ]
 }
