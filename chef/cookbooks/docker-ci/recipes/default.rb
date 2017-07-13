@@ -16,3 +16,7 @@ docker_image 'jenkinsci/jnlp-slave' do
   action :pull
 end
 
+# docker_image 'evarga/jenkins-slave' do
+#   action :pull
+# end
+
