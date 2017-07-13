@@ -27,39 +27,39 @@ git_config 'user.name' do
     user 'jenkins'
 end
 
-secret = Chef::EncryptedDataBagItem.load_secret("/tmp/vagrant-chef/encrypted_data_bag_secret_key")
-credentials = Chef::EncryptedDataBagItem.load("jenkins", "ad_creds", secret)
+# secret = Chef::EncryptedDataBagItem.load_secret("/tmp/vagrant-chef/encrypted_data_bag_secret_key")
+# credentials = Chef::EncryptedDataBagItem.load("jenkins", "ad_creds", secret)
+#
+# init_dir = "#{node['jenkins']['master']['home']}/init.groovy.d"
+#
+# directory init_dir do
+#   owner node['jenkins']['master']['user']
+#   group node['jenkins']['master']['group']
+#   recursive true
+# end
 
-init_dir = "#{node['jenkins']['master']['home']}/init.groovy.d"
-
-directory init_dir do
-  owner node['jenkins']['master']['user']
-  group node['jenkins']['master']['group']
-  recursive true
-end
-
-template "#{init_dir}/01-install-maven.groovy" do
-  source 'init/01-install-maven.groovy.erb'
-  mode '0755'
-  owner node['jenkins']['master']['user']
-  group node['jenkins']['master']['group']
-  variables(
-    'tools': node['jenkins']['tools']
-  )
-end
-
-template "#{init_dir}/02-ad-auth.groovy" do
-  source 'init/02-ad-auth.groovy.erb'
-  mode '0755'
-  owner node['jenkins']['master']['user']
-  group node['jenkins']['master']['group']
-  variables(
-    'ad_domain': credentials['credentials']['ad_domain'],
-    'ad_site': credentials['credentials']['ad_site'],
-    'ad_server': credentials['credentials']['ad_server'],
-    'ad_bindname': credentials['credentials']['ad_bindname'],
-    'ad_bindpasswd': credentials['credentials']['ad_bindpasswd'],
-  )
-end
+# template "#{init_dir}/01-install-maven.groovy" do
+#   source 'init/01-install-maven.groovy.erb'
+#   mode '0755'
+#   owner node['jenkins']['master']['user']
+#   group node['jenkins']['master']['group']
+#   variables(
+#     'tools': node['jenkins']['tools']
+#   )
+# end
+#
+# template "#{init_dir}/02-ad-auth.groovy" do
+#   source 'init/02-ad-auth.groovy.erb'
+#   mode '0755'
+#   owner node['jenkins']['master']['user']
+#   group node['jenkins']['master']['group']
+#   variables(
+#     'ad_domain': credentials['credentials']['ad_domain'],
+#     'ad_site': credentials['credentials']['ad_site'],
+#     'ad_server': credentials['credentials']['ad_server'],
+#     'ad_bindname': credentials['credentials']['ad_bindname'],
+#     'ad_bindpasswd': credentials['credentials']['ad_bindpasswd'],
+#   )
+# end
 
 jenkins_command 'safe-restart'
