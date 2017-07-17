@@ -1,0 +1,22 @@
+import jenkins.model.*
+import jenkins.security.*
+import hudson.security.*
+import hudson.plugins.active_directory.*
+
+def instance = Jenkins.getInstance()
+def adrealm = new ActiveDirectorySecurityRealm(
+    "<%= @ad_domain %>",
+    "<%= @ad_site %>",
+    "<%= @ad_bindname %>",
+    "<%= @ad_bindpasswd %>",
+    "<%= @ad_server %>",
+    GroupLookupStrategy.RECURSIVE
+)
+
+instance.setSecurityRealm(adrealm)
+
+def strategy = new FullControlOnceLoggedInAuthorizationStrategy()
+strategy.setAllowAnonymousRead(true)
+instance.setAuthorizationStrategy(strategy)
+
+instance.save()
