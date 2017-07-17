@@ -1,8 +1,13 @@
 github:1.27.0
-git:3.3.0
+git:3.3.2
 job-dsl:1.59
 mailer:1.20
 display-url-api:2.0
 token-macro:2.1
 git-client:2.4.6
 yet-another-docker-plugin:0.1.0-rc37
+ssh-slaves:1.20
+ssh-credentials:1.13
+docker-commons:1.8
+credentials:2.1.13
+script-security:1.29.1
