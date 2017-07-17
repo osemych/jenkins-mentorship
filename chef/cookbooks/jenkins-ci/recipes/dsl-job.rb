@@ -20,5 +20,5 @@ end
 jenkins_job 'dsl-hello-world' do
   config xml
   action :create
-  notifies :build, 'jenkins_job[dsl-hello-world]', :delayed
+#  notifies :build, 'jenkins_job[dsl-hello-world]', :delayed
 end

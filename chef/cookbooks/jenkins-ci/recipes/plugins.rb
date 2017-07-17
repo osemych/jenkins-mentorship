@@ -27,4 +27,4 @@ if File.exists?("#{plugins}")
     end
 end
 
-jenkins_command 'safe-restart'
+#jenkins_command 'safe-restart'
