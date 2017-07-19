@@ -1,0 +1,9 @@
+{
+  "id": "ad_creds",
+  "credentials": {
+    "encrypted_data": "8TX8FAcZ/zXuglBfg2g200halzqH1lP9bRrrR+C2kMsmLCs8mh4xHlm/6oIl\n5Yqw110fw28vAzIliTfy6UFZaOo/ZXtWozY7jTHgxBKPNYsHeWrUl2RDFlxB\nV1RXqbe6lUEFFakyNPvMjYt+RhT++LNW2X3KPVCXg4QPR0NByW82cFArT/D3\nRdqmwkMIO5cHj3fIzjU1sp9dnGKkqPoajdPkegEgpxX9libJXMzQydU=\n",
+    "iv": "C1wQ7ymJCkTlLb6BYR6wjA==\n",
+    "version": 1,
+    "cipher": "aes-256-cbc"
+  }
+}
